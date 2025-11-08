@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Peru Mar - Pedidos</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="/" class="btn-inicio"><div class="logo-mark">M</div></a>
+      
+      <div>
+        <div class="brand">Peru Mar</div>
+        <div style="font-size:12px;color:var(--muted)">Tomar Pedido</div>
+      </div>
+      <a href="/ventas" class="btn-inicio"><div class="logo-mark">V</div></a>
+    </div>
+
+    <div class="mesa-info" id="mesaInfo">
+      <div class="numero">Mesa: <span id="numero-mesa">-</span></div>
+      <div class="estado" id="estado-mesa">Estado: -</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar">
+      <div class="search">
+        <input id="searchInput" placeholder="Buscar plato o ingrediente..." />
+        <button id="clearSearch" class="secondary">Limpiar</button>
+      </div>
+      <div style="margin-left:12px">
+        <button id="viewOrderBtn" class="btn">Ver pedido</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section>
+        <div id="menuGrid" class="grid"></div>
+      </section>
+
+      <aside>
+        <div class="order-panel">
+          <h4>Tu pedido</h4>
+          <div id="orderList" class="order-list"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div style="font-weight:700">Total</div>
+            <div id="orderTotal" style="font-weight:700">S/ 0.00</div>
+          </div>
+
+          <div class="actions">
+            <button id="downloadImg" class="btn">Generar imagen</button>
+            <button id="shareWhats" class="btn" style="background:var(--red)">Compartir</button>
+            <button id="marcarPagado" class="secondary">Marcar como pagado</button>
+          </div>
+
+          <div style="margin-top:8px;font-size:13px;color:var(--muted)">Descarga la imagen y compártela en WhatsApp o usa el botón compartir en móviles.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>Diseñado para ser intuitivo y rápido. Compatible con WhatsApp Web y WhatsApp en móvil.</footer>
+
+  <!-- Hidden order card used to render image -->
+  <div id="renderArea" style="position:fixed;left:-9999px;top:0;width:360px;">
+    <div id="orderCard">
+      <h3>Pedido - Mesa <span id="imgMesa">-</span></h3>
+      <div id="orderLines"></div>
+      <hr />
+      <div class="order-summary-line"><div>Subtotal</div><div id="imgSubtotal">S/ 0.00</div></div>
+      <div class="order-summary-line"><div>IGV (18%)</div><div id="imgTax">S/ 0.00</div></div>
+      <div class="order-summary-line" style="font-weight:700"><div>Total</div><div id="imgTotal">S/ 0.00</div></div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">Gracias por tu pedido</div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

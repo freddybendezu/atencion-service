@@ -1,0 +1,87 @@
+:root{
+  --blue:#1e66ff;
+  --red:#e03131;
+  --bg:#f7f8fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --text:#0f172a;
+}
+*{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial}
+body{margin:0;background:var(--bg);color:var(--text)}
+/* Header */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 20px;
+  background:linear-gradient(90deg, rgba(30,102,255,0.04), rgba(224,49,49,0.02));
+  border-bottom:1px solid rgba(0,0,0,0.03);
+}
+.logo{display:flex;gap:12px;align-items:center}
+.logo-mark{
+  width:44px;height:44px;border-radius:8px;
+  background:linear-gradient(135deg,var(--red),var(--blue));
+  display:flex;align-items:center;justify-content:center;color:white;font-weight:700;
+}
+.brand{font-weight:700;font-size:16px}
+.brand-block .muted{font-size:12px;color:var(--muted);margin-top:2px}
+nav .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer}
+nav .ghost{background:linear-gradient(90deg,var(--blue),#3a72ff);color:white;text-decoration:none;display:inline-block}
+
+/* Container + grid */
+.container{max-width:1100px;margin:22px auto;padding:0 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;padding:18px}
+
+/* Card (matches visual style of platos) */
+.mesa-card{
+  background:var(--card);
+  padding:12px;
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(15,23,42,0.04);
+  display:flex;
+  gap:12px;
+  align-items:center;
+  transition:transform .12s,box-shadow .12s;
+  cursor:pointer;
+}
+.mesa-card:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(15,23,42,0.06)}
+
+/* Left thumb */
+.mesa-thumb{
+  width:72px;height:64px;border-radius:10px;background:#eef2ff;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;
+}
+
+/* Middle meta */
+.mesa-meta{flex:1;min-width:0}
+.mesa-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mesa-desc{font-size:13px;color:var(--muted);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Right area: total + button */
+.mesa-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.mesa-total{font-weight:700}
+.mesa-actions{display:flex;gap:8px;align-items:center}
+
+/* Buttons */
+.btn-primary{
+  background:var(--blue);color:white;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600;
+}
+.btn-secondary{
+  background:#f3f4f6;color:var(--text);padding:8px 12px;border-radius:10px;border:0;cursor:pointer;
+}
+.btn-primary:active{transform:translateY(1px)}
+
+/* Status pill */
+.status-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 8px;border-radius:999px;font-size:13px;background:#fbfdff;border:1px solid #eef2ff}
+.pill-dot{width:10px;height:10px;border-radius:50%}
+
+/* colors for pill */
+.pill-free .pill-dot{background:#c7b2ff} /* purple-ish */
+.pill-occupied .pill-dot{background:#22c55e}
+
+/* Responsive tweaks */
+@media(max-width:640px){
+  .mesa-card{padding:10px}
+  .mesa-thumb{width:56px;height:48px}
+  .mesa-total{font-size:14px}
+}

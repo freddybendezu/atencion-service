@@ -1,0 +1,11 @@
+service: cevicheria
+runtime: nodejs20
+instance_class: F1
+env: standard
+
+handlers:
+  - url: /(.*\.(js|css|png|jpg|jpeg|gif|ico|svg))$
+    static_files: public/\1
+    upload: public/.*\.(js|css|png|jpg|jpeg|gif|ico|svg)$
+  - url: /.*
+    script: auto
