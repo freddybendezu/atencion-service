@@ -33,11 +33,19 @@ async function loadMesas() {
 
       list.forEach(mesa => {
           // tolerate different field names:
+
+
+          
+
+
           const id = mesa.id ?? mesa.mesaId ?? mesa.number ?? mesa.numero ?? 'N/A';
           const ocupada = !!(mesa.ocupada ?? mesa.occupied ?? mesa.isBusy);
           const total = Number(mesa.total ?? mesa.amount ?? mesa.totalAmount ?? 0) || 0;
           const itemsCount = Number(mesa.itemsCount ?? mesa.count ?? mesa.items ?? 0) || 0;
-          const subtitle = ocupada ? `${itemsCount} plato${itemsCount===1 ? '' : 's'}` : 'Disponible';
+          //const subtitle = ocupada ? `${itemsCount} plato${itemsCount===1 ? '' : 's'}` : 'Disponible';
+          const subtitle = ocupada ? "Ocupado" : "Disponible";
+
+
 
           const card = document.createElement("div");
           card.className = "mesa-card";
@@ -45,7 +53,21 @@ async function loadMesas() {
           card.addEventListener('click', () => { window.location.href = `/pedidos?mesaId=${encodeURIComponent(id)}`; });
 
           // Build inner HTML like the platos design
-          card.innerHTML = `
+          if (ocupada){
+            card.innerHTML = `
+            <div class="mesa-thumb-resaltado">Mesa</div>
+            <div class="mesa-meta">
+              <div class="mesa-title">Mesa ${id}</div>
+              <div class="mesa-desc">${subtitle}</div>
+            </div>
+            <div class="mesa-right">
+              <div class="mesa-total">S/ ${total.toFixed(2)}</div>
+      
+            </div>
+          `;
+        
+          }else{
+            card.innerHTML = `
             <div class="mesa-thumb">Mesa</div>
             <div class="mesa-meta">
               <div class="mesa-title">Mesa ${id}</div>
@@ -57,7 +79,10 @@ async function loadMesas() {
             </div>
           `;
 
-        
+          }
+
+          
+          
 
           container.appendChild(card);
       });

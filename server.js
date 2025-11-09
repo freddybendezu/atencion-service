@@ -103,6 +103,24 @@ app.get("/api/ventas/:fecha", async (req, res) => {
 });
 
 
+// Ruta para actualizar una entidad
+app.post("/api/mesa/update", async (req, res) => {
+  try {
+    const { kind, data } = req.body;
+
+    // Validación básica
+    if (!kind || !data || !data.id) {
+      return res.status(400).json({ error: "Faltan parámetros: kind o data.id" });
+    }
+
+    const updated = await ds.updateEntity(kind, data);
+    res.json({ message: "Registro actualizado correctamente", updated });
+  } catch (err) {
+    console.error("Error al actualizar:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 
 

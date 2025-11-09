@@ -52,6 +52,13 @@ nav .ghost{background:linear-gradient(90deg,var(--blue),#3a72ff);color:white;tex
   display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;
 }
 
+/* Left thumb */
+.mesa-thumb-resaltado{
+  width:72px;height:64px;border-radius:10px;background:#ff7d00;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;
+}
+
+
 /* Middle meta */
 .mesa-meta{flex:1;min-width:0}
 .mesa-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

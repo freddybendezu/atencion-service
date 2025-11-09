@@ -129,6 +129,9 @@ function renderOrderFromApi(pedidosApi){
         <div style="width:70px;text-align:right">${formatPrice(subtotalItem)}</div>
       </div>
     `;
+
+
+
     orderList.appendChild(tr);
   });
 
@@ -150,6 +153,10 @@ function renderOrderFromApi(pedidosApi){
   // estado mesa
   const estado = subtotal > 0 ? 'Ocupada' : 'Libre';
   document.getElementById('estado-mesa').textContent = `Estado: ${estado}`;
+
+  // actualizar estado y total de consumo de mesa
+  const estadoMesa = subtotal > 0 ? true : false;
+  actualizarMesa(mesaId, estadoMesa, subtotal);
 
   // preparar tarjeta de imagen
   populateImageCard(pedidosApi, subtotal, tax, total);
@@ -193,6 +200,7 @@ async function marcarPagado(){
   try{
     const res = await fetch(`/api/pagar/${mesaId}`, { method: 'POST' });
     if(!res.ok) throw new Error('Error marcando pagado');
+    
     await loadPedidos();
   }catch(e){
     console.error(e); alert('No se pudo marcar como pagado');
@@ -211,6 +219,23 @@ function populateImageCard(pedidosApi, subtotal, tax, total){
   document.getElementById('imgTax').textContent = formatPrice(tax);
   document.getElementById('imgTotal').textContent = formatPrice(total);
 }
+
+
+//actualizar el estado de la mesa y el total de consumo
+async function actualizarMesa(id, ocupada, total) {
+  const res = await fetch("/api/mesa/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      kind: "Mesa",
+      data: { id, ocupada, total },
+    }),
+  });
+
+  const result = await res.json();
+  console.log(result);
+}
+
 
 // generar imagen con html2canvas
 async function generateImage(){

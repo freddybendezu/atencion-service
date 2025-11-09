@@ -60,3 +60,60 @@ footer{max-width:1100px;margin:18px auto;padding:0 18px;color:var(--muted);font-
   .order-panel{position:relative;top:0}
 }
 
+
+
+
+
+/* === Ajustes para que el panel de pedidos sea visible en móvil === */
+
+@media (max-width: 768px) {
+  /* El layout pasa a una sola columna */
+  .layout {
+    display: block;
+  }
+
+  /* Hace que el aside del pedido quede fijo abajo */
+  aside {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 2px solid var(--red);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    padding: 12px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  /* Oculta el botón “Ver pedido” del toolbar en móvil */
+  .toolbar #viewOrderBtn {
+    display: none;
+  }
+
+  /* Botón interno opcional (si quieres mostrar/ocultar el pedido) */
+  .toggle-mobile-btn {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-weight: 600;
+  }
+}
+
+@media (min-width: 769px) {
+  /* En escritorio todo se muestra normal */
+  aside {
+    position: static !important;
+    border-top: none;
+    border-radius: 12px;
+    box-shadow: none;
+    max-height: none;
+  }
+}

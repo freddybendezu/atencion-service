@@ -161,6 +161,29 @@ export async function saveEntity(kind, data) {
   await datastore.save({ key, data });
 }
 
+
+// Actualiza un registro existente en Datastore (id puede venir en data)
+export async function updateEntity(kind, data) {
+  if (!data.id) throw new Error("El campo 'id' es obligatorio");
+
+  // Buscar por el campo id
+  const query = datastore.createQuery(kind).filter("id", "=", Number(data.id));
+  const [entities] = await datastore.runQuery(query);
+  if (!entities.length) throw new Error(`No se encontró un registro con id: ${data.id} en ${kind}`);
+
+  const entity = entities[0];
+  const key = entity[datastore.KEY];
+
+  // Forzar tipo numérico en id
+  const updatedData = { ...entity, ...data, id: Number(data.id) };
+
+  await datastore.save({ key, data: updatedData });
+  return updatedData;
+}
+
+
+
+
 // Consulta por rango de fecha
 export async function queryByDateRange(kind, fechaInicio, fechaFin) {
   const query = datastore.createQuery(kind)
