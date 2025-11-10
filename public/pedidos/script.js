@@ -1,18 +1,14 @@
-
-// --- configuración ---
 const TAX = 0;
 let mesaId = null;
 let menu = [];
-// ped = pedidos cargados desde /api/pedidos/{mesaId}
 let pedidos = [];
 
 const menuGrid = document.getElementById('menuGrid');
 const orderList = document.getElementById('orderList');
 const orderTotalEl = document.getElementById('orderTotal');
 
-function formatPrice(v){return 'S/ ' + Number(v).toFixed(2)}
+function formatPrice(v){ return 'S/ ' + Number(v).toFixed(2); }
 
-// obtener mesaId de la URL
 function readMesaId(){
   const params = new URLSearchParams(location.search);
   mesaId = params.get('mesaId') || null;
@@ -20,7 +16,6 @@ function readMesaId(){
   document.getElementById('imgMesa').textContent = mesaId || '-';
 }
 
-// CARGAR PLATOS (usa /api/platos)
 async function loadPlatos(){
   try{
     const res = await fetch('/api/platos');
@@ -28,13 +23,57 @@ async function loadPlatos(){
     menu = await res.json();
   }catch(e){
     console.error(e);
-    // fallback: array vacío
     menu = [];
   }
   renderMenu(menu);
 }
 
-// CARGAR PEDIDOS DE LA MESA (usa /api/pedidos/{mesaId})
+function groupByCategory(items){
+  const grouped = {};
+  items.forEach(it=>{
+    const cat = it.categoria || 'Sin categoría';
+    if(!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(it);
+  });
+  return grouped;
+}
+
+function renderMenu(items){
+  menuGrid.innerHTML = '';
+  const grouped = groupByCategory(items);
+
+  Object.entries(grouped).forEach(([cat, platos])=>{
+    const catHeader = document.createElement('h3');
+    catHeader.textContent = cat;
+    catHeader.className = 'category-title';
+    menuGrid.appendChild(catHeader);
+
+    platos.forEach(it =>{
+      const card = document.createElement('div');
+      card.className='card';
+      card.innerHTML = `
+        <div class="thumb">Foto</div>
+        <div class="meta">
+          <div class="title">${escapeHtml(it.nombre || it.name || '')}</div>
+          <div class="desc">${escapeHtml(it.categoria || '')}</div>
+        </div>
+        <div class="right">
+          <div class="price">${formatPrice(it.precio || 0)}</div>
+          <button class="btn" data-id="${encodeURIComponent(it.id || it.nombre)}">Agregar</button>
+        </div>
+      `;
+      menuGrid.appendChild(card);
+    });
+  });
+
+  menuGrid.querySelectorAll('button[data-id]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const id = decodeURIComponent(e.currentTarget.dataset.id);
+      addToOrderByMenuId(id, 1);
+    });
+  });
+}
+
 async function loadPedidos(){
   if(!mesaId) return;
   try{
@@ -48,63 +87,31 @@ async function loadPedidos(){
   renderOrderFromApi(pedidos);
 }
 
-// RENDER MENU estilo DISEÑO 1 (cards)
-function renderMenu(items){
-  menuGrid.innerHTML = '';
-  items.forEach(it =>{
-    const card = document.createElement('div'); card.className='card';
-    card.innerHTML = `
-      <div class="thumb">Foto</div>
-      <div class="meta">
-        <div class="title">${escapeHtml(it.nombre || it.name || '')}</div>
-        <div class="desc">${escapeHtml(it.descripcion || it.desc || it.categoria || '')}</div>
-      </div>
-      <div class="right">
-        <div class="price">${formatPrice(Number(it.precio || it.price || 0))}</div>
-        <div>
-          <button class="btn" data-id="${encodeURIComponent(it.id || it._id || it.nombre)}">Agregar</button>
-        </div>
-      </div>
-    `;
-    menuGrid.appendChild(card);
-  });
-
-  // attach events
-  menuGrid.querySelectorAll('button[data-id]').forEach(b=>{
-    b.addEventListener('click', e=>{
-      const id = decodeURIComponent(e.currentTarget.dataset.id);
-      addToOrderByMenuId(id, 1);
-    });
-  });
-}
-
-// agrega al pedido usando la API /api/pedido
 async function addToOrderByMenuId(menuId, qty){
-  // encontrar información del plato en 'menu' (por id o nombre)
-  const plat = menu.find(m => String(m.id) === String(menuId) || String(m._id) === String(menuId) || String(m.nombre) === String(menuId));
+  const plat = menu.find(m => String(m.id) === String(menuId) || String(m.nombre) === String(menuId));
   if(!plat){ alert('Plato no encontrado'); return; }
+  
+  const fechaPeru = new Date().toLocaleString("sv-SE", { timeZone: "America/Lima" }).replace(" ", "T");
+
   const payload = {
     mesaId,
-    plato: plat.nombre || plat.name,
+    plato: plat.nombre,
     cantidad: qty,
-    precio: Number(plat.precio || plat.price || 0),
+    precio: Number(plat.precio || 0),
     pagado: false,
-    fecha: new Date().toISOString().split('T')[0]
-    //fecha: new Date().toISOString()
+    //fecha: new Date().toISOString().split('T')[0]
+    fecha: fechaPeru
   };
 
   try{
     const res = await fetch('/api/pedido', {
-      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
     });
     if(!res.ok) throw new Error('Error agregando pedido');
     await loadPedidos();
-  }catch(e){
-    console.error(e); alert('No se pudo agregar el pedido');
-  }
+  }catch(e){ console.error(e); alert('No se pudo agregar el pedido'); }
 }
 
-// renderizar pedidos obtenidos desde API
 function renderOrderFromApi(pedidosApi){
   orderList.innerHTML = '';
   let subtotal = 0;
@@ -122,26 +129,23 @@ function renderOrderFromApi(pedidosApi){
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <div class="qty">
-          <button data-action="dec" data-id="${p.id || p._id}" title="Reducir">-</button>
+          <button data-action="dec" data-id="${p.id}" title="Reducir">-</button>
           <div style="min-width:26px;text-align:center">${p.cantidad}</div>
-          <button data-action="inc" data-id="${p.id || p._id}" title="Aumentar">+</button>
+          <button data-action="inc" data-id="${p.id}" title="Aumentar">+</button>
         </div>
         <div style="width:70px;text-align:right">${formatPrice(subtotalItem)}</div>
       </div>
     `;
-
-
-
     orderList.appendChild(tr);
   });
 
-  // attach qty events
   orderList.querySelectorAll('button[data-action]').forEach(b=>{
     b.addEventListener('click', e=>{
-      const id = e.currentTarget.dataset.id; const act = e.currentTarget.dataset.action;
-      const ped = pedidosApi.find(x => String(x.id) === String(id) || String(x._id) === String(id));
+      const id = e.currentTarget.dataset.id;
+      const act = e.currentTarget.dataset.action;
+      const ped = pedidosApi.find(x => String(x.id) === String(id));
       if(!ped) return;
-      const nueva = act==='inc' ? Number(ped.cantidad) + 1 : Number(ped.cantidad) - 1;
+      const nueva = act==='inc' ? Number(ped.cantidad)+1 : Number(ped.cantidad)-1;
       updatePedidoCantidad(ped, nueva);
     });
   });
@@ -149,75 +153,38 @@ function renderOrderFromApi(pedidosApi){
   const tax = subtotal * TAX;
   const total = subtotal + tax;
   orderTotalEl.textContent = formatPrice(total);
-
-  // estado mesa
-  const estado = subtotal > 0 ? 'Ocupada' : 'Libre';
-  document.getElementById('estado-mesa').textContent = `Estado: ${estado}`;
+  document.getElementById('estado-mesa').textContent = `Estado: ${subtotal>0?'Ocupada':'Libre'}`;
 
   // actualizar estado y total de consumo de mesa
   const estadoMesa = subtotal > 0 ? true : false;
   actualizarMesa(mesaId, estadoMesa, subtotal);
-
+  
   // preparar tarjeta de imagen
   populateImageCard(pedidosApi, subtotal, tax, total);
+
 }
 
-// actualizar cantidad: PUT /api/pedido/{id}
 async function updatePedidoCantidad(pedido, nuevaCantidad){
   if(nuevaCantidad <= 0){
     if(!confirm('¿Deseas eliminar este plato?')) return;
-    await deletePedido(pedido.id || pedido._id);
+    await deletePedido(pedido.id);
     return;
   }
   try{
-    const body = {...pedido, cantidad: nuevaCantidad};
-    const id = pedido.id || pedido._id;
-    const res = await fetch(`/api/pedido/${id}`, {
-      method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+    const res = await fetch(`/api/pedido/${pedido.id}`, {
+      method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...pedido,cantidad:nuevaCantidad})
     });
     if(!res.ok) throw new Error('Error actualizando pedido');
     await loadPedidos();
-  }catch(e){
-    console.error(e); alert('No se pudo actualizar la cantidad');
-  }
+  }catch(e){ console.error(e); alert('No se pudo actualizar'); }
 }
 
-// borrar pedido: DELETE /api/pedido/{id}
 async function deletePedido(id){
   try{
-    const res = await fetch(`/api/pedido/${id}`, { method: 'DELETE' });
-    if(!res.ok) throw new Error('Error borrando pedido');
+    const res = await fetch(`/api/pedido/${id}`, {method:'DELETE'});
+    if(!res.ok) throw new Error('Error eliminando pedido');
     await loadPedidos();
-  }catch(e){
-    console.error(e); alert('No se pudo eliminar el pedido');
-  }
-}
-
-// marcar pagado: POST /api/pagar/{mesaId}
-async function marcarPagado(){
-  if(!mesaId) return alert('Mesa no definida');
-  if(!confirm('¿Marcar todos los pedidos de la mesa como pagados?')) return;
-  try{
-    const res = await fetch(`/api/pagar/${mesaId}`, { method: 'POST' });
-    if(!res.ok) throw new Error('Error marcando pagado');
-    
-    await loadPedidos();
-  }catch(e){
-    console.error(e); alert('No se pudo marcar como pagado');
-  }
-}
-
-// preparar tarjeta para imagen/whatsapp
-function populateImageCard(pedidosApi, subtotal, tax, total){
-  const lines = document.getElementById('orderLines'); lines.innerHTML='';
-  pedidosApi.forEach(it=>{
-    const div = document.createElement('div'); div.className='order-summary-line';
-    div.innerHTML = `<div>${it.cantidad} x ${escapeHtml(it.plato)}</div><div>${formatPrice(it.cantidad * it.precio)}</div>`;
-    lines.appendChild(div);
-  });
-  document.getElementById('imgSubtotal').textContent = formatPrice(subtotal);
-  document.getElementById('imgTax').textContent = formatPrice(tax);
-  document.getElementById('imgTotal').textContent = formatPrice(total);
+  }catch(e){ console.error(e); alert('No se pudo eliminar'); }
 }
 
 
@@ -237,6 +204,21 @@ async function actualizarMesa(id, ocupada, total) {
 }
 
 
+// preparar tarjeta para imagen/whatsapp
+function populateImageCard(pedidosApi, subtotal, tax, total){
+  const lines = document.getElementById('orderLines'); lines.innerHTML='';
+  pedidosApi.forEach(it=>{
+    const div = document.createElement('div'); div.className='order-summary-line';
+    div.innerHTML = `<div>${it.cantidad} x ${escapeHtml(it.plato)}</div><div>${formatPrice(it.cantidad * it.precio)}</div>`;
+    lines.appendChild(div);
+  });
+  document.getElementById('imgSubtotal').textContent = formatPrice(subtotal);
+  document.getElementById('imgTax').textContent = formatPrice(tax);
+  document.getElementById('imgTotal').textContent = formatPrice(total);
+}
+
+
+
 // generar imagen con html2canvas
 async function generateImage(){
   if(!pedidos || pedidos.length===0){ alert('El pedido está vacío.'); return; }
@@ -248,6 +230,7 @@ async function generateImage(){
     URL.revokeObjectURL(url);
   }, 'image/png');
 }
+
 
 // compartir por WhatsApp (texto + intento de compartir imagen si soportado)
 async function shareWhats(){
@@ -272,21 +255,51 @@ async function shareWhats(){
   }
 }
 
-// BUSCAR
-document.getElementById('searchInput').addEventListener('input', e=>{
-  const q = e.target.value.trim().toLowerCase();
-  renderMenu(menu.filter(m=> (m.nombre||m.name||'').toString().toLowerCase().includes(q) || (m.descripcion||m.desc||'').toString().toLowerCase().includes(q)));
-});
-document.getElementById('clearSearch').addEventListener('click', ()=>{ document.getElementById('searchInput').value=''; renderMenu(menu); });
 
-// botones
 document.getElementById('downloadImg').addEventListener('click', generateImage);
 document.getElementById('shareWhats').addEventListener('click', shareWhats);
-document.getElementById('viewOrderBtn').addEventListener('click', ()=>{ document.querySelector('.order-panel').scrollIntoView({behavior:'smooth'}); });
-document.getElementById('marcarPagado').addEventListener('click', marcarPagado);
 
-// util
-function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
-// INIT
+// 🔧 FIX definitivo para móviles y desktop
+document.getElementById('viewOrderBtn').addEventListener('click', ()=>{
+  const orderPanel = document.querySelector('.order-panel');
+  if(!orderPanel) return;
+
+  // En móviles, centramos el panel completo
+  const isMobile = window.innerWidth <= 768;
+  if(isMobile) {
+    orderPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // aseguramos el scroll tras 300 ms (fallback Android/iOS)
+    setTimeout(() => {
+      const top = orderPanel.getBoundingClientRect().top + window.scrollY - 40;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, 300);
+  } else {
+    // En escritorio
+    const top = orderPanel.getBoundingClientRect().top + window.scrollY - 60;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+});
+
+document.getElementById('searchInput').addEventListener('input', e=>{
+  const q = e.target.value.trim().toLowerCase();
+  renderMenu(menu.filter(m=>
+    (m.nombre||'').toLowerCase().includes(q) ||
+    (m.categoria||'').toLowerCase().includes(q)
+  ));
+});
+document.getElementById('clearSearch').addEventListener('click', ()=>{
+  document.getElementById('searchInput').value='';
+  renderMenu(menu);
+});
+
+document.getElementById('marcarPagado').addEventListener('click', async ()=>{
+  if(!mesaId) return alert('Mesa no definida');
+  if(!confirm('¿Marcar todos los pedidos como pagados?')) return;
+  await fetch(`/api/pagar/${mesaId}`, {method:'POST'});
+  await loadPedidos();
+});
+
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
 (async function init(){ readMesaId(); await loadPlatos(); await loadPedidos(); })();

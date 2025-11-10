@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const hoy = new Date().toISOString().split("T")[0];
+  //const hoy = new Date().toISOString().split("T")[0];
+
+  const hoy = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Lima" });
+
   document.getElementById("fechaInicio").value = hoy;
   document.getElementById("fechaFin").value = hoy;
   document.getElementById("btn-filtrar").addEventListener("click", filtrarVentas);
@@ -31,13 +34,13 @@ function mostrarVentas(ventas) {
     totalGeneral += total;
 
     tr.innerHTML = `
-      <td>${v.fecha}</td>
-      <td>${v.pagado}</td>  
       <td>${v.mesaId}</td>
       <td>${v.plato}</td>
       <td>${v.cantidad}</td>
       <td>S/ ${v.precio.toFixed(2)}</td>
       <td>S/ ${total.toFixed(2)}</td>
+      <td>${v.pagado ? "Si" : "No"}</td> 
+      <td>${v.fecha}</td>
     `;
     tbody.appendChild(tr);
   });

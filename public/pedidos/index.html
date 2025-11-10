@@ -11,7 +11,6 @@
   <header>
     <div class="logo">
       <a href="/" class="btn-inicio"><div class="logo-mark">M</div></a>
-      
       <div>
         <div class="brand">Peru Mar</div>
         <div style="font-size:12px;color:var(--muted)">Tomar Pedido</div>
@@ -26,9 +25,9 @@
   </header>
 
   <main class="container">
-    <div class="toolbar">
+    <div class="toolbar sticky-search">
       <div class="search">
-        <input id="searchInput" placeholder="Buscar plato o ingrediente..." />
+        <input id="searchInput" placeholder="Buscar plato" />
         <button id="clearSearch" class="secondary">Limpiar</button>
       </div>
       <div style="margin-left:12px">
@@ -37,11 +36,11 @@
     </div>
 
     <div class="layout">
-      <section>
+      <section id="menuSection">
         <div id="menuGrid" class="grid"></div>
       </section>
 
-      <aside class="mobile-sticky">
+      <aside>
         <div class="order-panel">
           <h4>Tu pedido</h4>
           <div id="orderList" class="order-list"></div>
@@ -67,7 +66,7 @@
   <!-- Hidden order card used to render image -->
   <div id="renderArea" style="position:fixed;left:-9999px;top:0;width:360px;">
     <div id="orderCard">
-      <h3>Pedido - Mesa <span id="imgMesa">-</span></h3>
+      <h3>Peru Mar - Mesa <span id="imgMesa">-</span></h3>
       <div id="orderLines"></div>
       <hr />
       <div class="order-summary-line"><div>Subtotal</div><div id="imgSubtotal">S/ 0.00</div></div>

@@ -111,12 +111,15 @@ export async function getPedidos(mesaId) {
 export async function savePedido(pedido) {
   // If id provided -> update, else create
   let key;
+  let codigoPedido;
   if (pedido.id) {
     // existing numeric id
     const parsed = isNaN(Number(pedido.id)) ? pedido.id : Number(pedido.id);
     key = datastore.key(["Pedido", parsed]);
+    //codigoPedido = pedido.codigoPedido;
   } else {
     key = datastore.key("Pedido"); // auto-id
+    codigoPedido = new Date().toISOString().replace(/[-:.TZ]/g, "");
   }
 
   // ensure numeric types
@@ -126,7 +129,8 @@ export async function savePedido(pedido) {
     cantidad: parseInt(pedido.cantidad),
     precio: parseFloat(pedido.precio),
     pagado: Boolean(pedido.pagado),
-    fecha: pedido.fecha || new Date().toISOString().split("T")[0]
+    fecha: pedido.fecha || new Date().toISOString().split("T")[0],
+    //codigoPedido: codigoPedido
   };
 
   await datastore.save({ key, data });
@@ -185,10 +189,23 @@ export async function updateEntity(kind, data) {
 
 
 // Consulta por rango de fecha
+/*
 export async function queryByDateRange(kind, fechaInicio, fechaFin) {
   const query = datastore.createQuery(kind)
     .filter("fecha", ">=", fechaInicio)
     .filter("fecha", "<=", fechaFin);
+  const [results] = await datastore.runQuery(query);
+  return results;
+}
+*/
+
+export async function queryByDateRange(kind, fechaInicio, fechaFin) {
+  const start = `${fechaInicio}T00:00:00`;
+  const end = `${fechaFin}T23:59:59`;
+  const query = datastore.createQuery(kind)
+    .filter("fecha", ">=", start)
+    .filter("fecha", "<=", end);
+
   const [results] = await datastore.runQuery(query);
   return results;
 }
