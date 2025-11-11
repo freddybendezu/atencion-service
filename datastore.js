@@ -111,15 +111,12 @@ export async function getPedidos(mesaId) {
 export async function savePedido(pedido) {
   // If id provided -> update, else create
   let key;
-  let codigoPedido;
-  if (pedido.id) {
+    if (pedido.id) {
     // existing numeric id
     const parsed = isNaN(Number(pedido.id)) ? pedido.id : Number(pedido.id);
     key = datastore.key(["Pedido", parsed]);
-    //codigoPedido = pedido.codigoPedido;
   } else {
     key = datastore.key("Pedido"); // auto-id
-    codigoPedido = new Date().toISOString().replace(/[-:.TZ]/g, "");
   }
 
   // ensure numeric types
@@ -130,7 +127,7 @@ export async function savePedido(pedido) {
     precio: parseFloat(pedido.precio),
     pagado: Boolean(pedido.pagado),
     fecha: pedido.fecha || new Date().toISOString().split("T")[0],
-    //codigoPedido: codigoPedido
+    codigoPedido: pedido.codigoPedido
   };
 
   await datastore.save({ key, data });

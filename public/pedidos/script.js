@@ -7,6 +7,8 @@ const menuGrid = document.getElementById('menuGrid');
 const orderList = document.getElementById('orderList');
 const orderTotalEl = document.getElementById('orderTotal');
 
+let nroPedido = document.getElementById('nro-pedido');
+
 function formatPrice(v){ return 'S/ ' + Number(v).toFixed(2); }
 
 function readMesaId(){
@@ -84,6 +86,7 @@ async function loadPedidos(){
     console.error(e);
     pedidos = [];
   }
+   
   renderOrderFromApi(pedidos);
 }
 
@@ -92,7 +95,7 @@ async function addToOrderByMenuId(menuId, qty){
   if(!plat){ alert('Plato no encontrado'); return; }
   
   const fechaPeru = new Date().toLocaleString("sv-SE", { timeZone: "America/Lima" }).replace(" ", "T");
-
+  
   const payload = {
     mesaId,
     plato: plat.nombre,
@@ -100,6 +103,7 @@ async function addToOrderByMenuId(menuId, qty){
     precio: Number(plat.precio || 0),
     pagado: false,
     //fecha: new Date().toISOString().split('T')[0]
+    codigoPedido: nroPedido,
     fecha: fechaPeru
   };
 
@@ -154,7 +158,13 @@ function renderOrderFromApi(pedidosApi){
   const total = subtotal + tax;
   orderTotalEl.textContent = formatPrice(total);
   document.getElementById('estado-mesa').textContent = `Estado: ${subtotal>0?'Ocupada':'Libre'}`;
+  if(pedidosApi[0]?.codigoPedido){
+    nroPedido=pedidosApi[0].codigoPedido;
+  }else{
+    nroPedido=new Date().toISOString().replace(/[-:.TZ]/g, "");
+  }
 
+  document.getElementById('nro-pedido').textContent = nroPedido;
   // actualizar estado y total de consumo de mesa
   const estadoMesa = subtotal > 0 ? true : false;
   actualizarMesa(mesaId, estadoMesa, subtotal);
