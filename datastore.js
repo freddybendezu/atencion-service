@@ -199,7 +199,9 @@ export async function queryByDateRange(kind, fechaInicio, fechaFin) {
 export async function queryByDateRange(kind, fechaInicio, fechaFin) {
   const start = `${fechaInicio}T00:00:00`;
   const end = `${fechaFin}T23:59:59`;
-  const query = datastore.createQuery(kind)
+
+  const query = datastore
+    .createQuery(kind)
     .filter("fecha", ">=", start)
     .filter("fecha", "<=", end);
 

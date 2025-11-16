@@ -1,54 +1,173 @@
-:root{--blue:#1e66ff;--red:#e03131;--bg:#f7f8fb;--card:#ffffff;--muted:#6b7280}
-*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial}
-body{margin:0;background:var(--bg);color:#0f172a}
+:root {
+  --blue: #1e66ff;
+  --green: #12b885;
+  --yellow: #f7b534;
+  --red: #e03131;
+  --bg: #f7f8fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+}
 
-header{display:flex;gap:12px;align-items:center;padding:18px 20px;background:linear-gradient(90deg,rgba(30,102,255,0.06),rgba(224,49,49,0.03));border-bottom:1px solid rgba(0,0,0,0.03)}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-.brand{font-weight:700;font-size:16px}
+* { box-sizing: border-box; font-family: Inter, system-ui; }
+body { margin: 0; background: var(--bg); }
 
-.container{max-width:1100px;margin:22px auto;padding:0 18px}
-.grid{display:flex;flex-direction:column;gap:14px}
-.category-title{margin:18px 0 6px;font-weight:700;font-size:17px;color:var(--blue)}
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #eee;
+}
 
-.card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.04);display:flex;gap:12px;align-items:center}
-.thumb{width:84px;height:64px;border-radius:8px;background:#eef2ff;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
-.meta{flex:1}
-.title{font-weight:600}
-.desc{font-size:13px;color:var(--muted);margin-top:4px}
-.right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.price{font-weight:700}
-.btn{background:var(--blue);color:white;padding:8px 10px;border-radius:8px;border:0;cursor:pointer}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue), var(--red));
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 18px;
+}
+.logo-mark.small { width: 34px; height: 34px; font-size: 14px; }
 
-.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
-.sticky-search{position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 0}
-.search{flex:1;display:flex;align-items:center;gap:8px}
-.search input{flex:1;padding:10px;border-radius:10px;border:1px solid #e6e9ef}
+.brand { font-weight: 700; }
+.subtitle { font-size: 12px; color: var(--muted); }
 
-.order-panel{position:sticky;top:18px;padding:12px;border-radius:12px;background:linear-gradient(180deg,white,#fbfdff);box-shadow:0 12px 34px rgba(15,23,42,0.06)}
-.layout{display:grid;grid-template-columns:1fr 360px;gap:18px}
-@media(max-width:980px){.layout{grid-template-columns:1fr}}
+/* LAYOUT */
+.container { max-width: 1100px; margin: 20px auto; padding: 0 16px; }
 
-.order-list{max-height:60vh;overflow:auto;padding:8px 0}
-.order-item{display:flex;justify-content:space-between;gap:8px;padding:8px;border-radius:8px}
-.qty{display:inline-flex;align-items:center;gap:6px}
-.qty button{width:28px;height:28px;border-radius:6px;border:1px solid #e6e9ef;background:white}
-.actions{display:flex;gap:8px;margin-top:10px}
-.secondary{background:#f3f4f6;color:#0f172a;padding:8px;border-radius:8px;border:0}
+/* TOOLBAR */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+input[type="date"], select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.btn {
+  background: var(--blue); color: white;
+  border: 0; padding: 8px 15px;
+  border-radius: 8px; cursor: pointer;
+}
+.btn:hover { opacity: .9; }
+
+/* LISTA DE CARDS */
+.pedidos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* CARD PRINCIPAL */
+.pedido-card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: 0.25s ease;
+  cursor: pointer;
+}
 
 
 
-/* order card (to render as image) */
-#orderCard{background:linear-gradient(180deg,#fff,#fbfdff);padding:18px;border-radius:12px;width:340px}
-#orderCard h3{margin:0 0 6px 0}
-.order-summary-line{display:flex;justify-content:space-between;margin:6px 0}
 
+.pedido-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
 
-footer{max-width:1100px;margin:18px auto;padding:0 18px;color:var(--muted);font-size:13px}
+.pedido-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-@media(max-width:680px){
-  .logo-mark{width:36px;height:36px}
-  .container{padding:0 10px}
-  .layout{grid-template-columns:1fr}
-  .order-panel{position:relative;top:0}
+.pedido-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pedido-codigo {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.pedido-mesa {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.pedido-total {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* BADGES DE ESTADO */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: white;
+  font-weight: 600;
+}
+
+.badge.pendiente   { background: var(--red); }
+.badge.preparando  { background: var(--yellow); color: #000; }
+.badge.listo       { background: var(--blue); }
+.badge.pagado      { background: var(--green); }
+
+/* CHEVRON */
+.chevron { transition: transform .25s; }
+.chevron.open { transform: rotate(90deg); }
+
+/* DETALLE EXPANDIBLE */
+.pedido-detalle {
+  margin-top: 12px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .35s ease;
+}
+
+.pedido-detalle.open {
+  max-height: 500px;
+}
+
+.pedido-detalle table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+}
+
+.pedido-detalle th {
+  background: #f0f4ff;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.pedido-detalle td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .pedido-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
 }

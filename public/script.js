@@ -50,7 +50,7 @@ async function loadMesas() {
           const card = document.createElement("div");
           card.className = "mesa-card";
           // open mesa page when clicking the card:
-          card.addEventListener('click', () => { window.location.href = `/pedidos?mesaId=${encodeURIComponent(id)}`; });
+          card.addEventListener('click', () => { window.location.href = `/pedir?mesaId=${encodeURIComponent(id)}`; });
 
           // Build inner HTML like the platos design
           if (ocupada){

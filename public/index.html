@@ -5,20 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perú Mar - Mesas</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="../header/header.css">
 </head>
 <body>
-  <header>
-    <div class="logo">
+
+
+
+
+
+
+  <header class="pm-header">
+    <div class="pm-header-left">
       <div class="logo-mark">PM</div>
-      <div class="brand-block">
+      <div>
         <div class="brand">Perú Mar</div>
-        <div class="muted">Gestión de Mesas</div>
+        <div class="subtitle">Pedidos</div>
       </div>
     </div>
-    <nav>
-      <a href="/ventas"><div class="logo-mark">V</div></a>
+  
+    <nav class="pm-nav-links">
+      <a href="/">Mesas</a>
+      <a href="/ventas">Ventas</a>
+      <a href="/pedidos">Pedidos</a>
     </nav>
+  
+    <button class="pm-burger" id="pm-burger">
+      ☰
+    </button>
   </header>
+  
+  <!-- PANEL LATERAL -->
+  <div class="pm-sidepanel" id="pm-sidepanel">
+    <div class="pm-sidepanel-header">
+      <span class="pm-sidepanel-title">Menú</span>
+      <button id="pm-close-panel" class="pm-close-btn">✕</button>
+    </div>
+    <a href="/">Mesas</a>
+    <a href="/ventas">Ventas</a>
+    <a href="/pedidos">Pedidos</a>
+  </div>
+  
+  <!-- Fondo oscuro cuando se abre el menú -->
+  <div class="pm-backdrop" id="pm-backdrop"></div>
+
+
+
+
 
   <main class="container">
     <section id="mesas-container" class="grid">
@@ -29,5 +61,6 @@
   <footer>© 2025 Perú Mar — Cevichería</footer>
 
   <script src="script.js"></script>
+  <script src="../header/header.js"></script>
 </body>
 </html>

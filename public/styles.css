@@ -88,7 +88,7 @@ nav .ghost{background:linear-gradient(90deg,var(--blue),#3a72ff);color:white;tex
 
 /* Responsive tweaks */
 @media(max-width:640px){
-  .mesa-card{padding:10px}
+  /* .mesa-card{padding:10px}*/
   .mesa-thumb{width:56px;height:48px}
   .mesa-total{font-size:14px}
 }
