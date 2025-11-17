@@ -1,4 +1,4 @@
-const TAX = 0;
+const TAX = 0; // 18% para cálculo de IGV
 let mesaId = null;
 let menu = [];
 let pedidos = [];
@@ -6,6 +6,12 @@ let pedidos = [];
 const menuGrid = document.getElementById('menuGrid');
 const orderList = document.getElementById('orderList');
 const orderTotalEl = document.getElementById('orderTotal');
+const orderSubtotalEl = document.getElementById('orderSubtotal');
+const orderTaxEl = document.getElementById('orderTax');
+const fabTotalEl = document.getElementById('fabTotal');
+const orderPanelContainer = document.getElementById('orderPanelContainer'); // Contenedor del modal
+const viewOrderFAB = document.getElementById('viewOrderFAB'); // FAB
+const closeOrderPanelBtn = document.getElementById('closeOrderPanel'); // Botón de cierre
 
 let nroPedido = document.getElementById('nro-pedido');
 
@@ -14,7 +20,6 @@ function formatPrice(v){ return 'S/ ' + Number(v).toFixed(2); }
 function readMesaId(){
   const params = new URLSearchParams(location.search);
   mesaId = params.get('mesaId') || null;
-  //document.getElementById('numero-mesa').textContent = mesaId || '-';
   document.getElementById('imgMesa').textContent = mesaId || '-';
 }
 
@@ -53,8 +58,9 @@ function renderMenu(items){
     platos.forEach(it =>{
       const card = document.createElement('div');
       card.className='card';
+      // Ajuste en el thumb para usar el CSS con ícono unicode
       card.innerHTML = `
-        <div class="thumb">Foto</div>
+        <div class="thumb"></div> 
         <div class="meta">
           <div class="title">${escapeHtml(it.nombre || it.name || '')}</div>
           <div class="desc">${escapeHtml(it.categoria || '')}</div>
@@ -102,7 +108,6 @@ async function addToOrderByMenuId(menuId, qty){
     cantidad: qty,
     precio: Number(plat.precio || 0),
     pagado: false,
-    //fecha: new Date().toISOString().split('T')[0]
     codigoPedido: nroPedido,
     fecha: fechaPeru
   };
@@ -156,8 +161,15 @@ function renderOrderFromApi(pedidosApi){
 
   const tax = subtotal * TAX;
   const total = subtotal + tax;
+  
+  // Actualización de los totales en el panel
+  orderSubtotalEl.textContent = formatPrice(subtotal);
+  orderTaxEl.textContent = formatPrice(tax);
   orderTotalEl.textContent = formatPrice(total);
-  //document.getElementById('estado-mesa').textContent = `Estado: ${subtotal>0?'Ocupada':'Libre'}`;
+  
+  // Actualización del FAB
+  fabTotalEl.textContent = formatPrice(total);
+  
   if(pedidosApi[0]?.codigoPedido){
     nroPedido=pedidosApi[0].codigoPedido;
   }else{
@@ -165,7 +177,7 @@ function renderOrderFromApi(pedidosApi){
   }
 
   document.getElementById('nro-pedido').textContent = nroPedido;
-  // actualizar estado y total de consumo de mesa
+  
   const estadoMesa = subtotal > 0 ? true : false;
   actualizarMesa(mesaId, estadoMesa, subtotal);
   
@@ -245,11 +257,11 @@ async function generateImage(){
 // compartir por WhatsApp (texto + intento de compartir imagen si soportado)
 async function shareWhats(){
   if(!pedidos || pedidos.length===0){ alert('El pedido está vacío.'); return; }
-  let text = `Pedido - Mesa ${mesaId}%0A`;
+  let text = `*Perú Mar - Pedido Mesa ${mesaId}*%0A%0A`;
   let subtotal = 0;
-  pedidos.forEach(it=>{ text += encodeURIComponent(`${it.cantidad} x ${it.plato} - S/ ${ (it.cantidad * it.precio).toFixed(2)}\n`); subtotal += it.cantidad * it.precio; });
+  pedidos.forEach(it=>{ text += encodeURIComponent(`- ${it.cantidad} x ${it.plato} - ${formatPrice(it.cantidad * it.precio)}\n`); subtotal += it.cantidad * it.precio; });
   const tax = subtotal * TAX; const total = subtotal + tax;
-  text += encodeURIComponent(`\nSubtotal: S/ ${subtotal.toFixed(2)}\nIGV (18%): S/ ${tax.toFixed(2)}\nTotal: S/ ${total.toFixed(2)}\n`);
+  text += encodeURIComponent(`\nSubtotal: ${formatPrice(subtotal)}\nIGV (${(TAX * 100).toFixed(0)}%): ${formatPrice(tax)}\n*Total: ${formatPrice(total)}*\n`);
 
   if(navigator.canShare && navigator.canShare()){
     try{
@@ -270,26 +282,24 @@ document.getElementById('downloadImg').addEventListener('click', generateImage);
 document.getElementById('shareWhats').addEventListener('click', shareWhats);
 
 
-// 🔧 FIX definitivo para móviles y desktop
-document.getElementById('viewOrderBtn').addEventListener('click', ()=>{
-  const orderPanel = document.querySelector('.order-panel');
-  if(!orderPanel) return;
-
-  // En móviles, centramos el panel completo
-  const isMobile = window.innerWidth <= 768;
-  if(isMobile) {
-    orderPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // aseguramos el scroll tras 300 ms (fallback Android/iOS)
-    setTimeout(() => {
-      const top = orderPanel.getBoundingClientRect().top + window.scrollY - 40;
-      window.scrollTo({ top, behavior: 'smooth' });
-    }, 300);
-  } else {
-    // En escritorio
-    const top = orderPanel.getBoundingClientRect().top + window.scrollY - 60;
-    window.scrollTo({ top, behavior: 'smooth' });
-  }
+// Lógica del FAB: Usa toggle para abrir y cerrar el modal
+viewOrderFAB.addEventListener('click', ()=>{
+  orderPanelContainer.classList.toggle('is-open');
 });
+
+// Lógica para cerrar con el nuevo botón '✕'
+closeOrderPanelBtn.addEventListener('click', () => {
+    orderPanelContainer.classList.remove('is-open');
+});
+
+// Lógica para cerrar si se hace clic en el fondo oscuro del modal (opcional, pero útil)
+orderPanelContainer.addEventListener('click', (e) => {
+    // Si se hace clic en el contenedor (el fondo)
+    if (e.target.id === 'orderPanelContainer') {
+        orderPanelContainer.classList.remove('is-open');
+    }
+});
+
 
 document.getElementById('searchInput').addEventListener('input', e=>{
   const q = e.target.value.trim().toLowerCase();
@@ -305,7 +315,7 @@ document.getElementById('clearSearch').addEventListener('click', ()=>{
 
 document.getElementById('marcarPagado').addEventListener('click', async ()=>{
   if(!mesaId) return alert('Mesa no definida');
-  if(!confirm('¿Marcar todos los pedidos como pagados?')) return;
+  if(!confirm('¿Marcar todos los pedidos como pagados y limpiar la mesa?')) return;
   await fetch(`/api/pagar/${mesaId}`, {method:'POST'});
   await loadPedidos();
 });

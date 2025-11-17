@@ -10,11 +10,6 @@
 </head>
 <body>
 
-
-
-
-
-
   <header class="pm-header">
     <div class="pm-header-left">
       <div class="logo-mark">PM</div>
@@ -35,7 +30,6 @@
     </button>
   </header>
   
-  <!-- PANEL LATERAL -->
   <div class="pm-sidepanel" id="pm-sidepanel">
     <div class="pm-sidepanel-header">
       <span class="pm-sidepanel-title">Menú</span>
@@ -46,54 +40,49 @@
     <a href="/pedidos">Pedidos</a>
   </div>
   
-  <!-- Fondo oscuro cuando se abre el menú -->
   <div class="pm-backdrop" id="pm-backdrop"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
   <main class="container">
-    <div class="toolbar sticky-search">
+    <div class="toolbar">
       <div class="search">
         <input id="searchInput" placeholder="Buscar plato" />
         <button id="clearSearch" class="secondary">Limpiar</button>
-      </div>
-      <div style="margin-left:12px">
-        <button id="viewOrderBtn" class="btn">Ver pedido</button>
       </div>
     </div>
 
     <div class="layout">
 
-
-      <aside>
+      <aside class="order-panel-container" id="orderPanelContainer">
         <div class="order-panel">
-          <h4>Tu pedido N°: <span id="nro-pedido"></span></h4>
+          
+          <div class="order-panel-header">
+            <h4>Pedido #<span id="nro-pedido"></span></h4>
+            <button id="closeOrderPanel" class="pm-close-btn" style="display:none">✕</button> 
+          </div>
+          
           <div id="orderList" class="order-list"></div>
+          
+          <hr style="border:0;border-top:1px solid #e6e9ef;margin:8px 0;">
+          
+          <div class="order-summary-line"><div>Subtotal</div><div id="orderSubtotal" style="font-weight:400">S/ 0.00</div></div>
+          <div class="order-summary-line"><div>IGV (18%)</div><div id="orderTax" style="font-weight:400">S/ 0.00</div></div>
+          
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
             <div style="font-weight:700">Total</div>
             <div id="orderTotal" style="font-weight:700">S/ 0.00</div>
           </div>
 
           <div class="actions">
-            <button id="downloadImg" class="btn">Generar imagen</button>
-            <button id="shareWhats" class="btn" style="background:var(--red)">Compartir</button>
-            <button id="marcarPagado" class="secondary">Marcar como pagado</button>
+            <button id="shareWhats" class="btn whatsapp-btn">Compartir 🟢</button> 
+            <button id="downloadImg" class="btn secondary">Generar imagen</button>
           </div>
-
-          <div style="margin-top:8px;font-size:13px;color:var(--muted)">Descarga la imagen y compártela en WhatsApp o usa el botón compartir en móviles.</div>
+          
+          <button id="marcarPagado" class="secondary" style="width:100%;margin-top:8px">Marcar como pagado</button>
+          
+          <div style="margin-top:8px;font-size:13px;color:var(--muted);text-align:center">
+            Descarga la imagen y compártela.
+          </div>
         </div>
       </aside>
-
       <section id="menuSection">
         <div id="menuGrid" class="grid"></div>
       </section>
@@ -103,7 +92,9 @@
 
   <footer>Diseñado para ser intuitivo y rápido. Compatible con WhatsApp Web y WhatsApp en móvil.</footer>
 
-  <!-- Hidden order card used to render image -->
+  <button id="viewOrderFAB" class="fab">
+    🛒 <span id="fabTotal">S/ 0.00</span>
+  </button>
   <div id="renderArea" style="position:fixed;left:-9999px;top:0;width:360px;">
     <div id="orderCard">
       <h3>Peru Mar - Mesa <span id="imgMesa">-</span></h3>
@@ -119,6 +110,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <script src="script.js"></script>
-  <script src="../header/header.js"></script>
+  <script src="../header/header.js"></script> 
 </body>
 </html>
