@@ -5,9 +5,17 @@
   --card:#ffffff;
   --muted:#6b7280;
   --text:#0f172a;
+  --green:#12b885; /* Añadimos el verde para consistencia de estado */
 }
 *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial}
 body{margin:0;background:var(--bg);color:var(--text)}
+
+/* Google Material Icons */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 20px !important;
+}
+
 /* Header */
 header{
   display:flex;
@@ -30,46 +38,82 @@ nav .ghost{background:linear-gradient(90deg,var(--blue),#3a72ff);color:white;tex
 
 /* Container + grid */
 .container{max-width:1100px;margin:22px auto;padding:0 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;padding:18px}
+/* ➡️ CORRECCIÓN: Eliminamos el padding redundante de .grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;} 
 
 /* Card (matches visual style of platos) */
 .mesa-card{
   background:var(--card);
-  padding:12px;
+  padding:15px; /* Aumentamos el padding para más espacio */
   border-radius:12px;
   box-shadow:0 6px 18px rgba(15,23,42,0.04);
   display:flex;
-  gap:12px;
+  gap:15px; /* Aumentamos el gap */
   align-items:center;
   transition:transform .12s,box-shadow .12s;
   cursor:pointer;
+  border-left: 5px solid transparent; /* Base para el indicador de estado */
 }
-.mesa-card:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(15,23,42,0.06)}
-
-/* Left thumb */
-.mesa-thumb{
-  width:72px;height:64px;border-radius:10px;background:#eef2ff;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;
+.mesa-card:hover{
+  transform:translateY(-2px); /* Menos movimiento para ser más sutil */
+  box-shadow:0 8px 24px rgba(15,23,42,0.1);
+}
+/* Resaltar mesa ocupada con borde izquierdo y sombra más fuerte */
+.mesa-card.ocupada {
+    border-left-color: var(--red);
+    box-shadow: 0 6px 18px rgba(224,49,49,0.1);
 }
 
-/* Left thumb */
-.mesa-thumb-resaltado{
-  width:72px;height:64px;border-radius:10px;background:#ff7d00;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;
+/* En su lugar, usamos un ícono moderno para representar la mesa */
+.mesa-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #eef2ff;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+}
+.mesa-icon-wrapper .material-symbols-outlined {
+    font-size: 26px !important;
+}
+/* Ícono de mesa resaltado cuando está ocupada */
+.mesa-card.ocupada .mesa-icon-wrapper {
+    background: var(--red);
+    color: white;
 }
 
 
 /* Middle meta */
 .mesa-meta{flex:1;min-width:0}
-.mesa-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mesa-desc{font-size:13px;color:var(--muted);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mesa-title{
+    font-weight: 700; /* Mayor peso */
+    font-size: 18px; /* Título más prominente */
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+}
+.mesa-desc{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:4px; /* Espacio más compacto */
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+}
 
 /* Right area: total + button */
-.mesa-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
-.mesa-total{font-weight:700}
+.mesa-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.mesa-total{
+    font-weight:700;
+    font-size: 20px; /* Tamaño del total mejorado */
+    color: var(--green); /* Color para total, mejor contraste */
+}
 .mesa-actions{display:flex;gap:8px;align-items:center}
 
-/* Buttons */
+/* Buttons (sin cambios) */
 .btn-primary{
   background:var(--blue);color:white;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600;
 }
@@ -78,17 +122,30 @@ nav .ghost{background:linear-gradient(90deg,var(--blue),#3a72ff);color:white;tex
 }
 .btn-primary:active{transform:translateY(1px)}
 
-/* Status pill */
-.status-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 8px;border-radius:999px;font-size:13px;background:#fbfdff;border:1px solid #eef2ff}
-.pill-dot{width:10px;height:10px;border-radius:50%}
+/* Status pill (Redefinidos para mayor claridad) */
+.status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:12px; /* Más pequeño para no competir con el título */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
 /* colors for pill */
-.pill-free .pill-dot{background:#c7b2ff} /* purple-ish */
-.pill-occupied .pill-dot{background:#22c55e}
+.pill-free{ background:#eefcf4; color:var(--green); } /* Fondo verde claro, texto verde */
+.pill-occupied{ background:#fce9e9; color:var(--red); } /* Fondo rojo claro, texto rojo */
+/* Pill dot (ya no es necesario si usamos el color de fondo para el pill) */
+.pill-dot{display:none;} 
+
 
 /* Responsive tweaks */
 @media(max-width:640px){
-  /* .mesa-card{padding:10px}*/
-  .mesa-thumb{width:56px;height:48px}
-  .mesa-total{font-size:14px}
+  .mesa-icon-wrapper{width:40px; height:40px;}
+  .mesa-icon-wrapper .material-symbols-outlined {font-size: 22px !important;}
+  .mesa-total{font-size:16px} /* Reducido para móvil */
+  .mesa-title{font-size:16px}
 }
