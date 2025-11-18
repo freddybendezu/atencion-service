@@ -6,168 +6,282 @@
   --bg: #f7f8fb;
   --card: #ffffff;
   --muted: #6b7280;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 * { box-sizing: border-box; font-family: Inter, system-ui; }
 body { margin: 0; background: var(--bg); }
 
-/* HEADER */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background: white;
-  border-bottom: 1px solid #eee;
+/* Google Material Icons */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 20px !important;
 }
 
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-mark {
-  width: 44px; height: 44px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--blue), var(--red));
-  display: flex; align-items: center; justify-content: center;
-  color: white; font-weight: 700; font-size: 18px;
+
+/* --- LAYOUT & TOOLBAR --- */
+.container { 
+  max-width: 1300px; 
+  margin: 0 auto; 
+  padding: 0 16px;
+  padding-top: 20px;
 }
-.logo-mark.small { width: 34px; height: 34px; font-size: 14px; }
 
-.brand { font-weight: 700; }
-.subtitle { font-size: 12px; color: var(--muted); }
-
-/* LAYOUT */
-.container { max-width: 1100px; margin: 20px auto; padding: 0 16px; }
-
-/* TOOLBAR */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+/* ToolBar Fija (Sticky) */
+.sticky-toolbar {
+    position: sticky;
+    top: 0; 
+    z-index: 10;
+    margin-bottom: 0;
+    border-radius: 0;
 }
 
 .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
 input[type="date"], select {
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  min-width: 150px;
 }
 
 .btn {
-  background: var(--blue); color: white;
-  border: 0; padding: 8px 15px;
+  border: 0; padding: 10px 18px;
   border-radius: 8px; cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  transition: background 0.2s;
 }
-.btn:hover { opacity: .9; }
 
-/* LISTA DE CARDS */
+.btn-primary {
+  background: var(--blue); color: white;
+}
+.btn-primary:hover { 
+  background: #1555e0; 
+}
+
+
+/* Total General Box */
+.total-general-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.2;
+}
+.total-label {
+    font-size: 14px;
+    color: var(--muted);
+}
+.total-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--green); 
+}
+
+
+/* --- LISTA DE PEDIDOS (GRID) --- */
 .pedidos-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+  min-height: 50vh;
 }
 
-/* CARD PRINCIPAL */
+/* ESTADO DE CARGA */
+.pedidos-list.loading {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.error-msg {
+  grid-column: 1 / -1; 
+  padding: 20px;
+  background: #ffebeb;
+  border: 1px solid var(--red);
+  color: var(--red);
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+
+/* --- CARD PRINCIPAL --- */
 .pedido-card {
   background: var(--card);
-  padding: 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-  border: 1px solid rgba(0,0,0,0.04);
+  border: 1px solid #eee;
   transition: 0.25s ease;
   cursor: pointer;
+  overflow: hidden; 
 }
-
-
-
 
 .pedido-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
 .pedido-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.pedido-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
+/* CÓDIGO DE PEDIDO (Talla global: 16px) */
 .pedido-codigo {
-  font-size: 18px;
+  font-size: 16px; 
   font-weight: 700;
+  color: #333;
 }
 
-.pedido-mesa {
-  font-size: 14px;
-  color: var(--muted);
-}
-
+/* TOTAL (Talla global: 18px) */
 .pedido-total {
-  font-size: 18px;
+  font-size: 18px; 
   font-weight: 700;
   color: var(--blue);
 }
 
-/* BADGES DE ESTADO */
-.badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: white;
-  font-weight: 600;
+/* Sección de METADATOS (Mesa, Fecha) */
+.pedido-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.pedido-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.pedido-meta-item strong {
+    color: #000;
+    font-weight: 600;
+}
+.pedido-meta-item .material-symbols-outlined {
+    font-size: 18px !important;
+    color: var(--muted);
 }
 
-.badge.pendiente   { background: var(--red); }
-.badge.preparando  { background: var(--yellow); color: #000; }
-.badge.listo       { background: var(--blue); }
-.badge.pagado      { background: var(--green); }
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px; 
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge.pendiente   { background: #fee8e8; color: var(--red); }
+.badge.preparando  { background: #fff8e1; color: #a87e00; }
+.badge.listo       { background: #e0f2ff; color: var(--blue); }
+.badge.pagado      { background: #e6fcf5; color: var(--green); }
 
 /* CHEVRON */
-.chevron { transition: transform .25s; }
+.chevron { 
+    transition: transform .25s; 
+    color: var(--muted);
+}
 .chevron.open { transform: rotate(90deg); }
 
 /* DETALLE EXPANDIBLE */
 .pedido-detalle {
-  margin-top: 12px;
+  padding: 0 15px 0; 
   overflow: hidden;
   max-height: 0;
-  transition: max-height .35s ease;
+  transition: max-height .3s ease-in-out, padding-top .3s ease-in-out, padding-bottom .3s ease-in-out;
 }
 
 .pedido-detalle.open {
-  max-height: 500px;
+  padding-top: 15px;
+  padding-bottom: 15px; 
+  border-top: 1px solid #f0f0f0;
 }
 
 .pedido-detalle table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 6px;
 }
 
 .pedido-detalle th {
-  background: #f0f4ff;
-  padding: 8px;
-  font-size: 14px;
+  background: #f8f9fa;
+  padding: 10px 8px;
+  font-size: 12px;
+  text-align: left;
+  color: #333;
 }
 
 .pedido-detalle td {
   padding: 8px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+.pedido-detalle tr:last-child td {
+    border-bottom: none;
 }
 
-/* MOBILE */
-@media (max-width: 640px) {
-  .pedido-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+
+/* --- RESPONSIVE LAYOUT --- */
+@media (max-width: 850px) {
+  /* En tablets, reducimos el mínimo de la rejilla */
+  .pedidos-list {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
+}
+
+@media (max-width: 550px) {
+    /* En móviles, ajustamos la barra de herramientas para apilado vertical */
+    .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .total-general-box {
+        width: 100%;
+        align-items: flex-start;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
+}
+
+/* ➡️ AJUSTES DE TALLA DE FUENTE ESPECÍFICOS PARA MÓVILES */
+@media (max-width: 480px) {
+    /* Reducimos el tamaño del código de pedido */
+    .pedido-codigo {
+        font-size: 14px; /* Reducido de 16px a 14px */
+    }
+
+    /* Reducimos el tamaño del total */
+    .pedido-total {
+        font-size: 16px; /* Reducido de 18px a 16px */
+    }
+
+    /* Opcional: Reducir el total general en el toolbar para que no sea intrusivo */
+    .total-value {
+        font-size: 26px; /* Reducido de 30px a 26px */
+    }
+
+    /* Opcional: Reducir el tamaño de los metadatos (mesa, platos) */
+    .pedido-meta {
+        font-size: 12px;
+    }
 }

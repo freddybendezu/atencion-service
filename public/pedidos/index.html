@@ -7,16 +7,10 @@
 
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="../header/header.css">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-
-
-
-
-
-
-
-
 
   <header class="pm-header">
     <div class="pm-header-left">
@@ -38,7 +32,6 @@
     </button>
   </header>
   
-  <!-- PANEL LATERAL -->
   <div class="pm-sidepanel" id="pm-sidepanel">
     <div class="pm-sidepanel-header">
       <span class="pm-sidepanel-title">Menú</span>
@@ -49,31 +42,30 @@
     <a href="/pedidos">Pedidos</a>
   </div>
   
-  <!-- Fondo oscuro cuando se abre el menú -->
   <div class="pm-backdrop" id="pm-backdrop"></div>
-
-
-
-
-
-
-
-
-<main class="container">
+  <main class="container">
   
-  <div class="toolbar">
+  <div class="toolbar sticky-toolbar">
+    
     <div class="filters">
-      <label>Desde:</label>
+      <label for="fechaInicio">Desde:</label>
       <input type="date" id="fechaInicio" />
-      <label>Hasta:</label>
+      <label for="fechaFin">Hasta:</label>
       <input type="date" id="fechaFin" />
-      <button id="btn-filtrar" class="btn">Filtrar</button>
+      
+      <button id="btn-filtrar" class="btn btn-primary">
+        <span class="material-symbols-outlined">filter_list</span> Filtrar
+      </button>
     </div>
 
-    <h2>Total General: <span id="total-general">S/ 0.00</span></h2>
+    <div class="total-general-box">
+        <span class="total-label">Total en Pedidos:</span>
+        <span id="total-general" class="total-value">S/ 0.00</span>
+    </div>
   </div>
 
-  <div id="pedidos-container" class="pedidos-list"></div>
+  <div id="pedidos-container" class="pedidos-list">
+    </div>
 
 </main>
 
