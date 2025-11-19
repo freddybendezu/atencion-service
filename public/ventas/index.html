@@ -6,16 +6,9 @@
   <title>Perú Mar - Ventas</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="../header/header.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-
-
-
-
-
-
-
-
 
   <header class="pm-header">
     <div class="pm-header-left">
@@ -37,7 +30,6 @@
     </button>
   </header>
   
-  <!-- PANEL LATERAL -->
   <div class="pm-sidepanel" id="pm-sidepanel">
     <div class="pm-sidepanel-header">
       <span class="pm-sidepanel-title">Menú</span>
@@ -48,14 +40,7 @@
     <a href="/pedidos">Pedidos</a>
   </div>
   
-  <!-- Fondo oscuro cuando se abre el menú -->
   <div class="pm-backdrop" id="pm-backdrop"></div>
-
-
-
-
-
-
 
 
   <main class="container">
@@ -65,9 +50,16 @@
         <input type="date" id="fechaInicio">
         <label for="fechaFin">Hasta:</label>
         <input type="date" id="fechaFin">
-        <button id="btn-filtrar" class="btn">Filtrar</button>
+        <button id="btn-filtrar" class="btn btn-primary">
+          <span class="material-symbols-outlined">filter_alt</span>
+          Filtrar
+        </button>
       </div>
-      <h2>Total General: <span id="total-general">S/ 0.00</span></h2>
+      
+      <div class="total-general-box">
+        <div class="total-label">Total Recaudado</div>
+        <div class="total-value">S/ <span id="total-general">0.00</span></div>
+      </div>
     </div>
 
     <div class="card">
@@ -78,12 +70,13 @@
             <th>Plato</th>
             <th>Cantidad</th>
             <th>Precio Unitario</th>
-            <th>Total</th>
-            <th>Pagado</th>
+            <th class="col-total">Total</th>
+            <th class="col-pagado">Pagado</th>
             <th>Fecha</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          </tbody>
       </table>
     </div>
   </main>

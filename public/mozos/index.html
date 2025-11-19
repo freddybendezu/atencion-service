@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perú Mar - Gestión de Mozos</title>
+
+  <link rel="stylesheet" href="../styles.css" /> 
+  <link rel="stylesheet" href="../header/header.css">
+  
+  <link rel="stylesheet" href="styles.css" /> 
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+
+  <header class="pm-header">
+    <div class="pm-header-left">
+      <div class="logo-mark">PM</div>
+      <div>
+        <div class="brand">Perú Mar</div>
+        <div class="subtitle">Gestión de Mozos</div>
+      </div>
+    </div>
+  
+    <nav class="pm-nav-links">
+      <a href="/">Mesas</a>
+      <a href="/ventas">Ventas</a>
+      <a href="/pedidos">Pedidos</a>
+      <a href="/mozos" class="active">Mozos</a>
+    </nav>
+  
+    <button class="pm-burger" id="pm-burger">
+      ☰
+    </button>
+  </header>
+  
+  <div class="pm-sidepanel" id="pm-sidepanel">
+    <div class="pm-sidepanel-header">
+      <span class="pm-sidepanel-title">Menú</span>
+      <button id="pm-close-panel" class="pm-close-btn">✕</button>
+    </div>
+    <a href="/">Mesas</a>
+    <a href="/ventas">Ventas</a>
+    <a href="/pedidos">Pedidos</a>
+    <a href="/mozos">Mozos</a>
+  </div>
+  
+  <div class="pm-backdrop" id="pm-backdrop"></div>
+  <main class="container">
+  
+    <div class="toolbar">
+      <div class="filters">
+        <select id="filtroEstado">
+          <option value="todos">Todos</option>
+          <option value="activo">Activos</option>
+          <option value="inactivo">Inactivos</option>
+        </select>
+      </div>
+
+      <button id="btn-nuevo-mozo" class="btn btn-primary">
+        <span class="material-symbols-outlined">add</span> Nuevo Mozo
+      </button>
+    </div>
+
+    <div id="mozos-container" class="mozos-list">
+      <p style="text-align:center; grid-column: 1 / -1; color: var(--muted);">Cargando mozos...</p>
+    </div>
+
+    <div id="mozo-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 id="modal-title">Nuevo Mozo</h3>
+        <form id="mozo-form">
+          <input type="hidden" id="mozo-id">
+          
+          <label for="nombre">Nombre Completo</label>
+          <input type="text" id="nombre" required>
+          
+          <label for="codigo">Código (Iniciales o Apodo)</label>
+          <input type="text" id="codigo" maxlength="5" required>
+          
+          <div class="checkbox-group">
+            <input type="checkbox" id="activo">
+            <label for="activo">Mozo Activo (Puede tomar pedidos)</label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancelar">Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    Gestión de Mozos — Perú Mar © 2025
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="../header/header.js"></script>
+</body>
+</html>

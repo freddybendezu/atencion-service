@@ -20,6 +20,12 @@ app.use(express.static(path.join(__dirname, "public")));
 ds.initMesas();
 ds.initPlatos();
 
+
+
+ds.initMozos(); // <--- AÑADIR ESTO
+
+
+
 /* ========== RUTAS API ========== */
 app.get("/api/mesas", async (req, res) => {
   const mesas = await ds.getMesas();
@@ -150,10 +156,54 @@ app.get("/api/ventas", async (req, res) => {
 
 
 
+
+
+
+
+
+
+/* ========== RUTAS API para MOZOS ========== */
+app.get("/api/mozos", async (req, res) => {
+  const mozos = await ds.getMozos();
+  res.json(mozos);
+});
+
+// crear/actualizar mozo (saveMozo maneja ambos)
+app.post("/api/mozo", async (req, res) => {
+  try {
+    const id = await ds.saveMozo(req.body);
+    return res.json({ ok: true, id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "error guardando mozo" });
+  }
+});
+
+// borrar mozo
+app.delete("/api/mozo/:id", async (req, res) => {
+  try {
+    await ds.deleteMozo(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "error eliminando mozo" });
+  }
+});
+
+
+
+
+
+
+
+
+
+
 /* ========== SERVIR PÁGINAS ========== */
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public/index.html")));
 app.get("/mesa", (req, res) => res.sendFile(path.join(__dirname, "public/mesa/index.html")));
 app.get("/ventas", (req, res) => res.sendFile(path.join(__dirname, "public/ventas/index.html")));
+app.get("/mozos", (req, res) => res.sendFile(path.join(__dirname, "public/mozos/index.html"))); // <--- AÑADIR ESTO
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));

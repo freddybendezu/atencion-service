@@ -215,3 +215,63 @@ export async function getAll(kind) {
   const [results] = await datastore.runQuery(query);
   return results;
 }
+
+
+
+
+
+/* ========== MOZOS ========== */
+/*
+  Mozo entity structure:
+  {
+    nombre: String,
+    codigo: String,
+    activo: Boolean,
+  }
+*/
+export async function getMozos() {
+  const query = datastore.createQuery("Mozo").order('nombre', { descending: false });
+  const [mozos] = await datastore.runQuery(query);
+  return mapEntitiesWithId(mozos);
+}
+
+export async function saveMozo(mozo) {
+  let key;
+  if (mozo.id) {
+      const parsed = isNaN(Number(mozo.id)) ? mozo.id : Number(mozo.id);
+      key = datastore.key(["Mozo", parsed]);
+  } else {
+      key = datastore.key("Mozo");
+  }
+
+  const data = {
+      nombre: mozo.nombre,
+      codigo: mozo.codigo,
+      activo: Boolean(mozo.activo),
+  };
+
+  await datastore.save({ key, data });
+  return (key.id || key.name) ?? null;
+}
+
+export async function deleteMozo(mozoId) {
+const parsed = isNaN(Number(mozoId)) ? mozoId : Number(mozoId);
+const key = datastore.key(["Mozo", parsed]);
+await datastore.delete(key);
+}
+
+export async function initMozos() {
+const [mozos] = await datastore.runQuery(datastore.createQuery("Mozo"));
+if (mozos.length === 0) {
+  const lista = [
+    { nombre: "Javier Flores", codigo: "JFL", activo: true },
+    { nombre: "Lucía Paredes", codigo: "LPA", activo: true },
+    { nombre: "Carlos Soto", codigo: "CSO", activo: false },
+  ];
+  for (const mozo of lista) {
+    const key = datastore.key(["Mozo"]);
+    await datastore.save({ key, data: mozo });
+  }
+  console.log("Mozos inicializados");
+}
+}

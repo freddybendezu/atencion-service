@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perú Mar - Dashboard</title>
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="../header/header.css">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <header class="pm-header">
+    <div class="pm-header-left">
+      <div class="logo-mark">PM</div>
+      <div>
+        <div class="brand">Perú Mar</div>
+        <div class="subtitle">Dashboard</div>
+      </div>
+    </div>
+  
+    <nav class="pm-nav-links">
+      <a href="/">Mesas</a>
+      <a href="/ventas">Ventas</a>
+      <a href="/pedidos">Pedidos</a>
+      <a href="/dashboard">Dashboard</a> 
+    </nav>
+  
+    <button class="pm-burger" id="pm-burger">
+      ☰
+    </button>
+  </header>
+  
+  <div class="pm-sidepanel" id="pm-sidepanel">
+    <div class="pm-sidepanel-header">
+      <span class="pm-sidepanel-title">Menú</span>
+      <button id="pm-close-panel" class="pm-close-btn">✕</button>
+    </div>
+    <a href="/">Mesas</a>
+    <a href="/ventas">Ventas</a>
+    <a href="/pedidos">Pedidos</a>
+    <a href="/dashboard">Dashboard</a> 
+  </div>
+  
+  <div class="pm-backdrop" id="pm-backdrop"></div>
+  <main class="container">
+  
+    <div class="toolbar"> 
+      <div class="filters">
+        <label for="fechaInicio">Desde:</label>
+        <input type="date" id="fechaInicio" />
+        <label for="fechaFin">Hasta:</label>
+        <input type="date" id="fechaFin" />
+        
+        <button id="btn-filtrar" class="btn btn-primary">
+          <span class="material-symbols-outlined">refresh</span> Actualizar
+        </button>
+      </div>
+    </div>
+
+    <div class="kpi-grid" id="kpi-grid">
+      <div class="kpi-card">
+        <span class="material-symbols-outlined icon-blue">attach_money</span>
+        <div class="kpi-info">
+          <div class="kpi-label">Ventas Totales</div>
+          <div class="kpi-value" id="totalVentas">S/ 0.00</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="material-symbols-outlined icon-green">paid</span>
+        <div class="kpi-info">
+          <div class="kpi-label">Pedidos Pagados</div>
+          <div class="kpi-value" id="pedidosPagados">0</div>
+        </div>
+      </div>
+      
+      <div class="kpi-card">
+        <span class="material-symbols-outlined icon-yellow">schedule</span>
+        <div class="kpi-info">
+          <div class="kpi-label">Pedidos Pendientes</div>
+          <div class="kpi-value" id="pedidosPendientes">0</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="material-symbols-outlined icon-red">groups</span>
+        <div class="kpi-info">
+          <div class="kpi-label">Mesa Promedio</div>
+          <div class="kpi-value" id="mesaPromedio">S/ 0.00</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      
+      <div class="chart-card">
+        <h3>Ventas Diarias (S/)</h3>
+        <canvas id="ventasDiariasChart"></canvas>
+      </div>
+      
+      <div class="chart-card">
+        <h3>Distribución de Platos</h3>
+        <canvas id="platosVendidosChart"></canvas>
+      </div>
+
+    </div>
+
+    <p style="text-align: center; margin-top: 30px; color: var(--muted);" id="loading-msg">Cargando datos...</p>
+
+</main>
+
+<footer>
+  Dashboard — Perú Mar © 2025
+</footer>
+
+<script src="script.js"></script> 
+<script src="../header/header.js"></script>
+</body>
+</html>

@@ -1,15 +1,25 @@
-
 :root {
   --blue: #1e66ff;
+  --green: #12b885; /* Añadimos verde para el total positivo */
+  --yellow: #f7b534;
   --red: #e03131;
   --bg: #f7f8fb;
   --card: #ffffff;
   --muted: #6b7280;
+  --text: #0f172a; /* Color de texto principal */
 }
 * { box-sizing: border-box; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; }
-body { margin: 0; background: var(--bg); color: #0f172a; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+
+/* Google Material Icons */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 20px !important;
+}
+
+/* HEADER (Se mantiene para consistencia) */
 header {
-  display: flex; gap: 12px; align-items: center;
+  display: flex; justify-content: space-between; align-items: center;
   padding: 18px 20px;
   background: linear-gradient(90deg, rgba(30,102,255,0.06), rgba(224,49,49,0.03));
   border-bottom: 1px solid rgba(0,0,0,0.03);
@@ -23,47 +33,166 @@ header {
 }
 .brand { font-weight: 700; font-size: 16px; }
 
+/* LAYOUT */
 main.container { max-width: 1100px; margin: 22px auto; padding: 0 18px; }
-.toolbar {
-  display: flex; flex-wrap: wrap; gap: 10px;
-  align-items: center; justify-content: space-between;
-  margin-bottom: 14px;
+.main-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
 }
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 20px; 
+  align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: var(--card); 
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* FILTROS */
 .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 input[type="date"] {
-  padding: 8px; border-radius: 8px; border: 1px solid #e6e9ef;
+  padding: 10px; 
+  border-radius: 8px; border: 1px solid #ddd;
+  min-width: 140px;
 }
 .btn {
-  background: var(--blue); color: white; border: 0; padding: 8px 12px;
+  background: var(--blue); color: white; border: 0; 
+  padding: 10px 15px; 
   border-radius: 8px; cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
 }
-.btn:hover { opacity: 0.9; }
-h2 span { color: var(--red); }
+.btn:hover { background: #1555e0; }
 
+/* TOTAL GENERAL BOX */
+.total-general-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.2;
+}
+.total-label {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+}
+.total-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--green); 
+}
+
+/* TABLA DE VENTAS */
 .card {
   background: var(--card);
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06); 
   padding: 16px;
   overflow-x: auto;
 }
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px;
+  min-width: 900px; 
 }
 th, td {
   text-align: left;
-  padding: 10px;
+  padding: 12px 10px; 
   border-bottom: 1px solid #f0f0f0;
 }
-th { background: #f9fafb; font-weight: 600; color: #334155; }
-td { color: #475569; }
-tbody tr:hover { background: #f9fbff; }
+th { 
+  background: #f8f9fa; 
+  font-weight: 600; 
+  color: #334155; 
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+td { 
+  color: #475569; 
+  font-size: 14px;
+}
+tbody tr:hover { background: #fcfdff; }
 
-footer {
+/* Resaltar columnas importantes */
+.col-total {
+  font-weight: 700;
+  color: var(--text) !important;
+}
+.col-pagado {
   text-align: center;
-  padding: 14px;
-  font-size: 13px;
-  color: var(--muted);
+}
+
+/* Badge para el estado Pagado/No Pagado */
+.badge-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+.badge-status.si { background: #e6fcf5; color: var(--green); } 
+.badge-status.no { background: #ffebeb; color: var(--red); } 
+
+
+/* --- RESPONSIVE: AJUSTE EN MÓVIL (< 550px) --- */
+@media (max-width: 550px) {
+    /* Reclama espacio lateral */
+    main.container {
+        padding: 0 10px;
+    }
+    
+    /* Toolbar apilada */
+    .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px; /* Reducir padding */
+    }
+    
+    /* Filtros (Fechas y Botón) */
+    .filters {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .filters label {
+        flex-shrink: 0;
+    }
+    input[type="date"] {
+        flex-grow: 1; /* Permite que llenen el espacio */
+        min-width: unset;
+        width: 40%; /* Ajuste manual para que ambos inputs quepan */
+    }
+    /* El botón de filtrar se hace ancho completo para fácil toque */
+    .filters .btn {
+        width: 100%;
+        margin-top: 10px; 
+        justify-content: center;
+    }
+
+    /* Caja del Total (se pone arriba de todo y a la izquierda) */
+    .total-general-box {
+        width: 100%;
+        align-items: flex-start;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+    .main-title {
+        font-size: 24px;
+    }
+}
+
+/* Ajuste de tablet vertical para tablas */
+@media (max-width: 768px) {
+    /* Permitir que la tabla se desplace, pero reducir un poco su tamaño mínimo */
+    table {
+        min-width: 700px;
+    }
 }
