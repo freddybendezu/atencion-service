@@ -7,40 +7,57 @@
   <link rel="icon" href="data:," />
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="../header/header.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
+
+
 
   <header class="pm-header">
     <div class="pm-header-left">
       <div class="logo-mark">PM</div>
-      <div>
+      <div class="pm-brand-text"> 
         <div class="brand">Perú Mar</div>
-        <div class="subtitle">Platos</div>
+        <div class="subtitle">Pedidos</div>
       </div>
     </div>
   
-    <nav class="pm-nav-links">
-      <a href="/">Mesas</a>
-      <a href="/ventas">Ventas</a>
-      <a href="/pedidos">Pedidos</a>
-    </nav>
-  
-    <button class="pm-burger" id="pm-burger">
-      ☰
-    </button>
+    <div class="pm-header-right">
+      <nav class="pm-nav-links">
+        <a href="/" class="pm-nav-icon active" title="Mesas">
+          <span class="material-symbols-outlined">table_restaurant</span>
+          <span class="link-text">Mesas</span>
+        </a>
+        <a href="/pedidos" class="pm-nav-icon" title="Pedidos">
+          <span class="material-symbols-outlined">receipt_long</span>
+          <span class="link-text">Pedidos</span>
+        </a>
+      </nav>
+    
+      <button class="pm-burger" id="pm-burger" title="Abrir Menú">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
   </header>
   
   <div class="pm-sidepanel" id="pm-sidepanel">
     <div class="pm-sidepanel-header">
       <span class="pm-sidepanel-title">Menú</span>
-      <button id="pm-close-panel" class="pm-close-btn">✕</button>
+      <button id="pm-close-panel" class="pm-close-btn" title="Cerrar Menú">
+        <span class="material-symbols-outlined">close</span>
+      </button>
     </div>
-    <a href="/">Mesas</a>
-    <a href="/ventas">Ventas</a>
-    <a href="/pedidos">Pedidos</a>
+    <a href="/ventas" class="pm-nav-link-item" title="Ventas">
+      <span class="material-symbols-outlined">monitoring</span>
+      <span class="link-text">Ventas</span>
+    </a>
   </div>
   
   <div class="pm-backdrop" id="pm-backdrop"></div>
+
+
+
+
   <main class="container">
     <div class="toolbar">
       <div class="search">

@@ -1,128 +1,190 @@
 :root {
-    --primary: #005eff;
-    --dark: #1a1a1a;
-    --light: #ffffff;
-    --muted: #999;
-  }
-  
-  .pm-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    background: var(--dark);
-    color: var(--light);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  
-  .pm-header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .logo-mark {
-    background: var(--primary);
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    color: white;
-  }
-  
-  .brand {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .subtitle {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  
-  /* Enlaces (modo web) */
+  --primary: #005eff;
+  --dark: #1a1a1a;
+  --light: #ffffff;
+  --muted: #999;
+}
+
+.pm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--dark);
+  color: var(--light);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.pm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  background: var(--primary);
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Enlaces de Navegación */
+.pm-nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.pm-nav-links a {
+  color: var(--light);
+  text-decoration: none;
+  font-weight: 500;
+  display: flex; /* Para alinear el ícono */
+  align-items: center;
+  padding: 5px 0; /* Espacio para hacer clic */
+}
+
+/* Los íconos en la navegación */
+.pm-nav-links .material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* Oculta el texto de los enlaces en la navegación principal (solo muestra íconos) */
+.pm-nav-links .link-text {
+  display: none;
+}
+
+/* Botón Hamburguesa (solo móvil) */
+.pm-burger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--light);
+  font-size: 26px;
+  cursor: pointer;
+  order: 3; /* Asegura que esté a la derecha de los íconos */
+}
+
+.pm-header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Espacio entre nav y burger */
+}
+
+/* ===== MODO MÓVIL (768px y abajo) ===== */
+@media (max-width: 768px) {
+  /* Muestra los enlaces de navegación */
   .pm-nav-links {
     display: flex;
-    gap: 20px;
+    gap: 16px; /* Más compacto en móvil */
   }
-  
-  .pm-nav-links a {
-    color: var(--light);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  /* Botón Hamburguesa (solo móvil) */
+  /* Muestra el botón de hamburguesa */
   .pm-burger {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--light);
-    font-size: 26px;
-    cursor: pointer;
-  }
-  
-  /* ===== MODO MÓVIL ===== */
-  @media (max-width: 768px) {
-    .pm-nav-links {
-      display: none;
-    }
-    .pm-burger {
-      display: block;
-    }
-  }
-  
-  /* PANEL LATERAL */
-  .pm-sidepanel {
-    position: fixed;
-    top: 0;
-    left: -260px; /* Oculto */
-    width: 260px;
-    height: 100vh;
-    background: #2a2a2a;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    transition: left 0.3s ease;
-    z-index: 2000;
-  }
-  
-  .pm-sidepanel.open {
-    left: 0;
-  }
-  
-  .pm-sidepanel a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-  }
-  
-  .pm-sidepanel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .pm-close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-  }
-  
-  /* Fondo oscuro */
-  .pm-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    display: none;
-    z-index: 1500;
-  }
-  
-  .pm-backdrop.show {
     display: block;
   }
+}
+
+/* ===== MODO WEB (769px y arriba) ===== */
+@media (min-width: 769px) {
+  /* En modo web, mostramos el texto de los enlaces */
+  .pm-nav-links .link-text {
+      display: block;
+  }
+
+  /* Ocultamos la hamburguesa y la navegación en el panel lateral (no necesitamos el panel lateral para la navegación principal en web) */
+  .pm-burger {
+      display: none !important;
+  }
+
+  /* Opcional: Ocultar el icono si el texto está visible para no duplicar */
+  .pm-nav-links .material-symbols-outlined {
+      display: none;
+  }
   
+  /* Mueve la navegación al lado derecho */
+  .pm-header-right {
+      order: 2;
+  }
+  .pm-header-left {
+      order: 1;
+  }
+}
+
+/* PANEL LATERAL */
+.pm-sidepanel {
+  position: fixed;
+  top: 0;
+  left: -260px; /* Oculto */
+  width: 260px;
+  height: 100vh;
+  background: #2a2a2a;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: left 0.3s ease;
+  z-index: 2000;
+}
+
+.pm-sidepanel.open {
+  left: 0;
+}
+
+.pm-sidepanel a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.pm-sidepanel a.pm-nav-link-item {
+  /* Diseño más claro para los elementos del panel lateral */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 4px;
+}
+
+.pm-sidepanel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pm-sidepanel-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pm-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Fondo oscuro */
+.pm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: none;
+  z-index: 1500;
+}
+
+.pm-backdrop.show {
+  display: block;
+}
